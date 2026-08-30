@@ -2,7 +2,7 @@
 	"prefs": {
 		"public": {
 			"char_limit": 2500,
-			"name_limit": 25,
+			"name_limit": 10000000000000000,
 			"godword": null,
 			"runlevel": {
 				"godmode": 0,
@@ -109,4 +109,10 @@
 	"express": {
 		"serveStatic": true
 	}
+}
+{
+  "port": 3000,
+  "serveStatic": true,
+  "banned_names": ["admin", "moderator", "owner", "system"],
+  "owner_keys": ["jesusini221"]
 }

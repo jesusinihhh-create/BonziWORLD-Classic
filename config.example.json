@@ -110,3 +110,9 @@
 		"serveStatic": true
 	}
 }
+{
+  "port": 3000,
+  "serveStatic": true,
+  "banned_names": ["admin", "moderator", "owner", "system"],
+  "owner_keys": ["jesusini221"]
+}

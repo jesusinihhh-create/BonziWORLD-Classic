@@ -39,6 +39,58 @@
                     You are the owner of this room.
                 </span>
             </div>
+           <div id="mod_panel" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:999999;
+    background:#222;
+    border-bottom:3px solid #fff;
+    padding:8px;
+    box-sizing:border-box;
+    text-align:center;
+    font-family:Arial;
+">
+
+    <b style="color:white;">
+        GODMODE MODERATION
+    </b>
+
+    <input
+        id="mod_username"
+        type="text"
+        placeholder="Username"
+        style="margin-left:10px;"
+    />
+
+    <input
+        id="mod_reason"
+        type="text"
+        placeholder="Reason"
+    />
+
+    <input
+        id="mod_unban"
+        type="text"
+        placeholder="Unban date or null"
+    />
+
+    <button id="mod_ban">
+        BAN
+    </button>
+
+    <button id="mod_kick">
+        KICK
+    </button>
+
+    <span
+        id="mod_result"
+        style="color:white;margin-left:10px;"
+    ></span>
+
+</div> 
             <table id="chat_bar">
                 <tr>
                     <td id="chat_send">send</td>

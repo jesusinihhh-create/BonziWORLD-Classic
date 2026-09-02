@@ -114,6 +114,11 @@ function newRoom(rid, prefs) {
 }
 
 let userCommands = {
+	"troll": function() {
+    this.room.emit("troll", {
+        guid: this.guid
+    });
+},
     "godmode": function(word) {
         let success = word == this.room.prefs.godword;
         if (success) this.private.runlevel = 3;

@@ -408,7 +408,162 @@ class User {
             });
         }
     }
+modBan(data) {
+    // Seguridad: solamente GodMode puede usar esto
+    if (this.private.runlevel < 3) {
+        return;
+    }
 
+    if (!data || typeof data !== "object") {
+        return;
+    }
+
+    let targetName = String(data.username || "").trim();
+    let reason = String(data.reason || "").trim();
+    let unbanDate = data.unbanDate;
+
+    if (!targetName) {
+        this.socket.emit("modResult", {
+            success: false,
+            message: "You must enter a username."
+        });
+
+        return;
+    }
+
+    let targetUser = null;
+
+    for (let guid in this.room.users) {
+        let user = this.room.users[guid];
+
+        if (
+            user.public &&
+            user.public.name &&
+            user.public.name.toLowerCase() === targetName.toLowerCase()
+        ) {
+            targetUser = user;
+            break;
+        }
+    }
+
+    if (!targetUser) {
+        this.socket.emit("modResult", {
+            success: false,
+            message: "User not found."
+        });
+
+        return;
+    }
+
+    // No banearse a sí mismo
+    if (targetUser.guid === this.guid) {
+        this.socket.emit("modResult", {
+            success: false,
+            message: "You cannot ban yourself."
+        });
+
+        return;
+    }
+
+    reason = reason || "N/A";
+
+    let length = null;
+
+    // null = permanente / N/A
+    if (
+        unbanDate &&
+        String(unbanDate).toLowerCase() !== "null"
+    ) {
+        let date = new Date(unbanDate);
+
+        if (!isNaN(date.getTime())) {
+            let difference = date.getTime() - Date.now();
+
+            if (difference > 0) {
+                length = difference / 60000;
+            }
+        }
+    }
+
+    Ban.addBan(
+        targetUser.getIp(),
+        length,
+        reason,
+        this.public.name
+    );
+
+    this.socket.emit("modResult", {
+        success: true,
+        message: targetName + " was banned."
+    });
+}
+
+modKick(data) {
+    // Seguridad: solamente GodMode
+    if (this.private.runlevel < 3) {
+        return;
+    }
+
+    if (!data || typeof data !== "object") {
+        return;
+    }
+
+    let targetName = String(data.username || "").trim();
+    let reason = String(data.reason || "").trim();
+
+    if (!targetName) {
+        this.socket.emit("modResult", {
+            success: false,
+            message: "You must enter a username."
+        });
+
+        return;
+    }
+
+    let targetUser = null;
+
+    for (let guid in this.room.users) {
+        let user = this.room.users[guid];
+
+        if (
+            user.public &&
+            user.public.name &&
+            user.public.name.toLowerCase() === targetName.toLowerCase()
+        ) {
+            targetUser = user;
+            break;
+        }
+    }
+
+    if (!targetUser) {
+        this.socket.emit("modResult", {
+            success: false,
+            message: "User not found."
+        });
+
+        return;
+    }
+
+    if (targetUser.guid === this.guid) {
+        this.socket.emit("modResult", {
+            success: false,
+            message: "You cannot kick yourself."
+        });
+
+        return;
+    }
+
+    Ban.kick(
+        targetUser.getIp(),
+        reason || "N/A",
+        this.public.name
+    );
+
+    this.socket.emit("modResult", {
+        success: true,
+        message: targetName + " was kicked."
+    });
+}
     command(data) {
         if (typeof data != 'object') return; // Crash fix (issue #9)
 
